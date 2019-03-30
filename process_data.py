@@ -24,6 +24,7 @@ MEAL_DATA_FILENAME = DATA_DIRECTORY + "meal_plan.csv"
 DOOR_DATA_NDAYS = 150
 SIX_PM_MINUTES = 1080
 
+
 def tree_process(target_building_code):
     """
     Process door swipe data for book return decision tree classifier.
@@ -43,8 +44,8 @@ def tree_process(target_building_code):
     num_returns = 0
 
     # labels:
-    # 0: "low-return day" (< 250 returns)
-    # 1: "high-return day" (>= 250 returns)
+    # -1: "low-return day" (< 250 returns)
+    #  1: "high-return day" (>= 250 returns)
     labels = [0 for _ in range(DOOR_DATA_NDAYS)]
 
     # tally up data for specified building code
@@ -59,9 +60,9 @@ def tree_process(target_building_code):
             # determine whether the previous day was high/low return
             if row["day"] != str(current_day):
                 if num_returns >= 250:
-                    labels[current_day] = -1
-                else:
                     labels[current_day] = 1
+                else:
+                    labels[current_day] = -1
                 current_day += 1
                 num_returns = 0
 
@@ -71,8 +72,10 @@ def tree_process(target_building_code):
                 samples[int(row["day"])][1] += 1
                 num_returns += int(row["is_book_return"])
 
+    # label last day
+    if num_returns >= 250:
+        labels[current_day] = 1
+    else:
+        labels[current_day] = -1
+
     return (samples, labels)
-
-
-if __name__ == "__main__":
-    tree_process()
