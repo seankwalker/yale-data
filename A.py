@@ -1,5 +1,5 @@
 """
-    tree.py
+    A.py
 
     Name:  Sean Walker
     NetID: skw34
@@ -12,14 +12,15 @@
     (fewer than 250 books returned).
 """
 
+
 import graphviz
 from sklearn import tree
 
-from process_data import tree_process
+from A_data import get_library_samples_labels
 
 
-BASS_LIBRARY_CODE = "3" # BASSLB
-LAW_LIBRARY_CODE = "80" # YLL
+BASS_LIBRARY_CODE = "3"  # BASSLB
+LAW_LIBRARY_CODE = "80"  # YLL
 
 
 def make_prediction(labels, library_name, samples, X):
@@ -35,9 +36,12 @@ def make_prediction(labels, library_name, samples, X):
 
     # model decision tree
     dot_data = tree.export_graphviz(classifier,
-            feature_names=["day of the week", "library traffic"],
-            class_names=["low-return day", "high-return day"], filled=True,
-            rounded=True, special_characters=True)
+                                    feature_names=[
+                                        "day of the week", "library traffic"],
+                                    class_names=[
+                                        "low-return day", "high-return day"],
+                                    filled=True, rounded=True,
+                                    special_characters=True)
     graph = graphviz.Source(dot_data)
     graph.render(library_name)
 
@@ -50,16 +54,16 @@ def main():
     libraries.
     """
 
-    bass_samples, bass_labels = tree_process(BASS_LIBRARY_CODE)
-    law_samples, law_labels = tree_process(LAW_LIBRARY_CODE)
+    bass_samples, bass_labels = get_library_samples_labels(BASS_LIBRARY_CODE)
+    law_samples, law_labels = get_library_samples_labels(LAW_LIBRARY_CODE)
 
     # predict Bass:
     # "Bass Library on a Saturday with 2400 visitors by 6pm"
     prediction = make_prediction(bass_labels, "Bass Library", bass_samples,
-            [[5, 2400]])
+                                 [[5, 2400]])
 
     print("model predicts that Bass Library on a Saturday with 2400 visitors ",
-            "by 6pm will be a", end=" ")
+          "by 6pm will be a", end=" ")
     if prediction == 1:
         print("high-return day")
     elif prediction == -1:
@@ -68,15 +72,15 @@ def main():
     # predict Law:
     # "the Law Library on a Thursday with 450 visitors by 6pm"
     prediction = make_prediction(law_labels, "Law Library", law_samples,
-            [[3, 450]])
+                                 [[3, 450]])
 
     print("model predicts that the Law Library on a Thursday with 450 ",
-            "visitors by 6pm will be a", end=" ")
+          "visitors by 6pm will be a", end=" ")
     if prediction == 1:
         print("high-return day")
     elif prediction == -1:
         print("low-return day")
-    
+
 
 if __name__ == "__main__":
     main()

@@ -1,40 +1,25 @@
 """
-    process_data.py
+    A_data.py
 
     Name:  Sean Walker
     NetID: skw34
 
-    CPSC 310, Spring 2019
-    Homework 3
-
-    Processes raw data into forms usable for individual tasks.
+    Processes door swipe data for part A question 1.
 """
 
 
 import csv
 
 
-# constants
 DATA_DIRECTORY = "../hw3_data/"
-
-BUILDING_CODES_FILENAME = DATA_DIRECTORY + "building_codes.csv"
 DOOR_DATA_FILENAME = DATA_DIRECTORY + "door_data.csv"
-MEAL_DATA_FILENAME = DATA_DIRECTORY + "meal_plan.csv"
-
 DOOR_DATA_NDAYS = 150
 SIX_PM_MINUTES = 1080
 
 
-def tree_process(target_building_code):
+def get_library_samples_labels(target_building_code):
     """
     Process door swipe data for book return decision tree classifier.
-
-    Input format:
-    day,day_of_week,student_id,time_of_day,building,is_dining_hall,is_book_return
-
-    Output format: a 150x2 array filled with, for each day (0-149):
-                        - the day of the week (0-6), and
-                        - the amount of library traffic for that day
     """
 
     # training samples
