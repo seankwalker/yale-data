@@ -54,8 +54,6 @@ def find_mealplan_nonusers():
 
             students_dining_swipes[row["student_id"]] += 1
 
-    print(f"{num_weeks} weeks in the data")
-
     underutilizers = {}
     for student_id in mealplan_holders:
         utilization = students_dining_swipes[student_id] / \
