@@ -15,11 +15,10 @@ from collections import Counter
 import csv
 
 
-COLLEGE_CODES = frozenset(["6", "7", "10", "17", "22", "26", "31",
-                           "46", "49", "51", "62", "68", "70", "71"])
+COLLEGE_CODES = frozenset(["6", "7", "10", "17", "22", "26", "31", "46", "49",
+                           "51", "62", "68", "70", "71"])
 DATA_DIRECTORY = "../hw3_data/"
 DOOR_DATA_FILENAME = DATA_DIRECTORY + "door_data.csv"
-DOOR_DATA_NDAYS = 150
 N_DAYS_IN_WEEK = 7
 
 

@@ -63,10 +63,12 @@ def process_dining_data(target_student_id):
                         # init: zero dinners at each college, no dinner times
                         dinner_data_tally[student_id] = list(
                             [0 for _ in range(len(COLLEGE_CODES))] + [[]])
-                    else:
-                        dinner_data_tally[student_id][COLLEGE_CODES.index(
-                            dinner[0])] += 1
-                        dinner_data_tally[student_id][-1].append(dinner[1])
+                    dinner_data_tally[student_id][COLLEGE_CODES.index(
+                        dinner[0])] += 1
+                    dinner_data_tally[student_id][-1].append(dinner[1])
+
+                # reset most recent dinners for the next day
+                most_recent_dinners = {}
                 current_day += 1
 
             most_recent_dinners[row["student_id"]] = [row["building"],
@@ -83,6 +85,7 @@ def process_dining_data(target_student_id):
     # remove target from sample data
     target_student_data = [dinners["2969414704160674"]]
     dinners.pop("2969414704160674")
+    print(f"target student data: {target_student_data}")
 
     # create a dictionary mapping features to student id, so as to identify
     # closest friends' student ids
