@@ -18,11 +18,11 @@ import B_4
 
 
 if __name__ == "__main__":
-    # print("question 1:")
-    # B_1.run()
-    # print("\n\nquestion 2:")
-    # B_2.run()
-    # print("\n\nquestion 3:")
-    # B_3.run()
+    print("question 1:")
+    B_1.run()
+    print("\n\nquestion 2:")
+    B_2.run()
+    print("\n\nquestion 3:")
+    B_3.run()
     print("\n\nquestion 4:")
     B_4.run()

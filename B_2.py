@@ -7,8 +7,8 @@
     CPSC 310, Spring 2019
     Homework 3
 
-    Implements a decision tree classifer to predict which residential college
-    a student will sleep in every night of the week.
+    Predicts which residential college a student will sleep in every night of
+    the week.
 """
 
 

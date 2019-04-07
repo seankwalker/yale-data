@@ -7,8 +7,8 @@
     CPSC 310, Spring 2019
     Homework 3
 
-    Implements a k-nearest-neighbors classifer to find friends of a specified
-    student.
+    Implements an unsupervised nearest-neighbors algorithm to find friends of a
+    specified student.
 """
 
 

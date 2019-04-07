@@ -27,6 +27,7 @@ def run():
 
 def write_email(student_id, student_mealplan_utilization):
     message = f"Dear {student_id},\nYou are only using " + \
-        f"{round(student_mealplan_utilization * MEALS_PER_WEEK)}"
+        f"{round(student_mealplan_utilization * MEALS_PER_WEEK)} of your " + \
+        "allotted meals per week.\n\nSincerely,\nYale Dining"
 
     return message
