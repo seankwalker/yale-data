@@ -15,6 +15,9 @@
 from B_3_data import find_mealplan_nonusers
 
 
+MEALS_PER_WEEK = 14
+
+
 def run():
     underutilizers = find_mealplan_nonusers()
 
@@ -23,10 +26,7 @@ def run():
 
 
 def write_email(student_id, student_mealplan_utilization):
-    message = f"Hello, {student_id}!\n\nThis is an automated message from " + \
-        "Yale Dining.\n\nWe just wanted to inform you that according to our" + \
-        " statistics, you've only been using about " + \
-        f"{round(student_mealplan_utilization * 100)}% of your meal swipes " + \
-        "per week (on average)!\n\nLove,\n\nYale Dining Bot"
+    message = f"Dear {student_id},\nYou are only using " + \
+        f"{round(student_mealplan_utilization * MEALS_PER_WEEK)}"
 
     return message

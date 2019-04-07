@@ -45,6 +45,7 @@ def make_prediction(labels, library_name, samples, X):
     graph = graphviz.Source(dot_data)
     graph.render(library_name)
 
+    print(f"prediction for {library_name}: {prediction}")
     return prediction
 
 
@@ -57,25 +58,23 @@ def main():
     bass_samples, bass_labels = get_library_samples_labels(BASS_LIBRARY_CODE)
     law_samples, law_labels = get_library_samples_labels(LAW_LIBRARY_CODE)
 
-    # predict Bass:
     # "Bass Library on a Saturday with 2400 visitors by 6pm"
     prediction = make_prediction(bass_labels, "Bass Library", bass_samples,
                                  [[5, 2400]])
 
-    print("model predicts that Bass Library on a Saturday with 2400 visitors ",
-          "by 6pm will be a", end=" ")
+    print("Bass Library on a Saturday with 2400 visitors by 6 p.m. is predicted",
+          "to be a", end=" ")
     if prediction == 1:
         print("high-return day")
     elif prediction == -1:
         print("low-return day")
 
-    # predict Law:
     # "the Law Library on a Thursday with 450 visitors by 6pm"
     prediction = make_prediction(law_labels, "Law Library", law_samples,
                                  [[3, 450]])
 
-    print("model predicts that the Law Library on a Thursday with 450 ",
-          "visitors by 6pm will be a", end=" ")
+    print("Law Library on a Thursday with 450 visitors by 6 p.m. is predicted",
+          "to be a", end=" ")
     if prediction == 1:
         print("high-return day")
     elif prediction == -1:

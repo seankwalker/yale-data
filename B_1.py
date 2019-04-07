@@ -16,7 +16,7 @@ from B_1_data import find_regular_appointment_at
 
 DAYS_OF_WEEK = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
                 "Friday", "Saturday"]
-YALE_HEALTH_CODE = "79"  # YHC
+YALE_HEALTH_CODE = "79"
 
 
 def run():
@@ -24,4 +24,4 @@ def run():
         YALE_HEALTH_CODE)
     print(f"student with id {student_id} has a regular Yale Health appointment",
           f"on {DAYS_OF_WEEK[int(day_of_week)]} at",
-          f"{int(time)//60}:{int(time)%60}")
+          f"{int(time)//60}:{int(time)%60:02d}")

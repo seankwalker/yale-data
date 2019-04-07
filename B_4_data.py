@@ -11,14 +11,17 @@
 """
 
 
+from collections import Counter
 import csv
 
 
+COLLEGE_CODES = ("6", "7", "10", "17", "22", "26", "31", "46", "49", "51", "62",
+                 "68", "70", "71")
 DATA_DIRECTORY = "../hw3_data/"
 DOOR_DATA_FILENAME = DATA_DIRECTORY + "door_data.csv"
 
 
-def process_dining_data():
+def process_dining_data(target_student_id):
     """
 
     Consider last dining hall swipe for a day to be a dinner swipe.
@@ -26,66 +29,70 @@ def process_dining_data():
     Can get, for each person per day:
         - which dhall
         - time
-        - day of week
 
     i.e. 3 features for a person
 
-    So now we have 150 samples, 3 features for 12,400 people.
+    So now we have 150 samples, 2 features for 12,400 people.
 
-
-    Our goal is obviously: given one person, find the 5 people with closest "dining habits"
-
-    So we need to make a feature "dining habits"
-
-    just flatten each student to one array
-
+    Reduce the 150 samples into one for each person:
+        - one feature per dhall for # times they swiped there
+        - average dinner swipe time
     """
 
-    # first, get all student ids
-    student_ids = set()
-    with open(DOOR_DATA_FILENAME, newline="") as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            student_ids.add(row["student_id"])
+    # the dining hall and time for the student's most recent dinner
+    most_recent_dinners = {}
 
-    # next, record the dinner data for every student
+    # for each `student_id`, a counter of their visits to various dining halls
+    # and a list of all their dinner times (to be averaged at the end)
+    dinner_data_tally = {}
     current_day = 0
-    most_recent_dinners = dict.fromkeys(student_ids, [None, None, None])
-    dinners = dict.fromkeys(student_ids, [])
-    student_by_dinners = {}
-
     with open(DOOR_DATA_FILENAME, newline="") as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            # only care about dining swipes
-            if row["is_dining_hall"] != "1":
+            # only care about dining hall swipes between 5pm and 8pm
+            # skip the target student
+            if (row["is_dining_hall"] != "1" or
+                    int(row["time_of_day"]) <= 1020 or
+                    int(row["time_of_day"]) >= 1200):
                 continue
 
             # check if we've moved to the next day
             if row["day"] != str(current_day):
                 # if so, save all the dinner data from the previous day
-                for student_id in student_ids:
-                    dinners[student_id] += most_recent_dinners[student_id]
-
-                    # reset meal to `None` for the next day
-                    # (it already is this if they didn't swipe for dinner today,
-                    # but that happens rarely, so checking would probably be
-                    # worse performance)
-                    most_recent_dinners[student_id] = [None, None, None]
-
+                for student_id, dinner in most_recent_dinners.items():
+                    if not dinner_data_tally.get(student_id):
+                        # init: zero dinners at each college, no dinner times
+                        dinner_data_tally[student_id] = list(
+                            [0 for _ in range(len(COLLEGE_CODES))] + [[]])
+                    else:
+                        dinner_data_tally[student_id][COLLEGE_CODES.index(
+                            dinner[0])] += 1
+                        dinner_data_tally[student_id][-1].append(dinner[1])
                 current_day += 1
 
-            # update most recent dinner swipe: must be between 5pm and 8pm
-            # could improve granularity here by making sure they're swiping
-            # at the exact dinner times for every college and given the day of
-            # the week, e.g. 5-7:30pm for a Hopper Tuesday
-            if (int(row["time_of_day"]) <= 1020 or
-                    int(row["time_of_day"]) >= 1200):
-                continue
-
             most_recent_dinners[row["student_id"]] = [row["building"],
-                                                      row["time_of_day"],
-                                                      row["day_of_week"]]
+                                                      int(row["time_of_day"])]
 
-    # now we have our data: 12,400 150x1 lists of "dinner habits"
-    return dinners
+    # calculate average dinner time
+    dinners = {}
+    for student_id, dinner_data in dinner_data_tally.items():
+        dinner_times = dinner_data_tally[student_id][-1]
+        dinners[student_id] = tuple(
+            dinner_data_tally[student_id][0:-1] +
+            [round(sum(dinner_times)/len(dinner_times))])
+
+    # remove target from sample data
+    target_student_data = [dinners["2969414704160674"]]
+    dinners.pop("2969414704160674")
+
+    # create a dictionary mapping features to student id, so as to identify
+    # closest friends' student ids
+    features_to_ids = {}
+    for student_id, features in dinners.items():
+        features_to_ids[features] = student_id
+
+    # return as a N x 2 array (where N = number of students)
+    # also return the data for `target_student_id` so their closest friends
+    # can be predicted
+    return ([dinner for _, dinner in dinners.items()], target_student_data,
+            features_to_ids)
