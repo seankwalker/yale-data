@@ -62,6 +62,9 @@ def get_last_college_per_day_tally():
                 current_day = row["day"]
                 current_day_of_week = row["day_of_week"]
 
+                # reset most recent swipe
+                students_most_recent_college_swipe = {}
+
             # update most recent swipe for this student
             student_id = row["student_id"]
             students_most_recent_college_swipe[student_id] = row["building"]
