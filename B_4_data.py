@@ -50,7 +50,6 @@ def process_dining_data(target_student_id):
         reader = csv.DictReader(csvfile)
         for row in reader:
             # only care about dining hall swipes between 5pm and 8pm
-            # skip the target student
             if (row["is_dining_hall"] != "1" or
                     int(row["time_of_day"]) <= 1020 or
                     int(row["time_of_day"]) >= 1200):

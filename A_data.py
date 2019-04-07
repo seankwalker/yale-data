@@ -44,8 +44,6 @@ def get_library_samples_labels(target_building_code):
 
             # determine whether the previous day was high/low return
             if row["day"] != str(current_day):
-                print(
-                    f"{target_building_code} had {num_returns} on day {current_day} and traffic of {samples[current_day][1]}")
                 if num_returns >= 250:
                     labels[current_day] = 1
                 else:
