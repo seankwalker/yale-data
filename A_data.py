@@ -35,6 +35,8 @@ def get_library_samples_labels(target_building_code):
 
     # tally up data for specified building code
     current_day = 0
+    n_high_r = 0
+    n_low_r = 0
     with open(DOOR_DATA_FILENAME, newline="") as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
@@ -46,8 +48,10 @@ def get_library_samples_labels(target_building_code):
             if row["day"] != str(current_day):
                 if num_returns >= 250:
                     labels[current_day] = 1
+                    n_high_r += 1
                 else:
                     labels[current_day] = -1
+                    n_low_r += 1
                 current_day += 1
                 num_returns = 0
 
@@ -60,7 +64,10 @@ def get_library_samples_labels(target_building_code):
     # label last day
     if num_returns >= 250:
         labels[current_day] = 1
+        n_high_r += 1
     else:
         labels[current_day] = -1
+        n_low_r += 1
 
+    print(f"high ret: {n_high_r} low ret: {n_low_r}")
     return (samples, labels)

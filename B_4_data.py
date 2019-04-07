@@ -85,7 +85,6 @@ def process_dining_data(target_student_id):
     # remove target from sample data
     target_student_data = [dinners["2969414704160674"]]
     dinners.pop("2969414704160674")
-    print(f"target student data: {target_student_data}")
 
     # create a dictionary mapping features to student id, so as to identify
     # closest friends' student ids
